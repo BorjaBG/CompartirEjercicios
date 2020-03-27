@@ -1,0 +1,172 @@
+openapi: 3.0.1
+info:
+  title: MF0966_3 REST API
+  description: REST API del ejercicio MF0966_3
+  contact:
+    email: buenoborja.infor@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/mf0966_3/api/'
+paths:
+  /cursos:
+     get:
+      tags:
+        - Cursos
+      summary: Obtener todos los cursos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Curso'
+        '404':
+          description: Valoracion no encontrada
+        '500':
+          description: Error del servidor
+  '/cursos/{idCurso}':
+    get:
+      tags:
+        - Cursos
+      summary: Obtener curso por id
+      parameters:
+        - name: idCurso
+          in: path
+          description: ID del curso pedido
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+        '400':
+          description: El id no es valido
+        '404':
+          description: No se ha encontrado el usuario
+  /valoraciones:
+    get:
+      tags:
+        - Valoraciones
+      summary: Obtener todas las valoraciones
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Valoracion'
+        '404':
+          description: Valoracion no encontrada
+    post:
+      tags:
+        - Valoraciones
+      summary: Añadir una valoracion
+      requestBody:
+        description: Añadir Valoracion
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Valoracion'
+        required: true
+      responses:
+        '201':
+          description: Valoracion creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Valoracion'
+  '/valoraciones/{idValoracion}':
+    put:
+      tags:
+        - Valoraciones
+      summary: Modificar una valoracion
+      parameters:
+        - name: idValoracion
+          in: path
+          description: Id de la valoracion a modificar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Valoracion a modificar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Valoracion'
+        required: true
+      responses:
+        '201':
+          description: Valoracion modificada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Valoracion'
+        '400':
+          description: El id no es valido
+        '404':
+          description: No se ha encontrado la valoracion
+
+    delete:
+      tags:
+        - Valoraciones
+      summary: Borrar una valoracion por su Id
+      parameters:
+        - name: idValoracion
+          in: path
+          description: ID de la valoracion a borrar
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Valoracion borrada
+        '400':
+          description: El id no es valido
+        '404':
+          description: No se ha encontrado la valoracion
+components:
+  schemas:
+    Curso:
+      type: object
+      properties:
+        nHoras:
+          type: integer
+          format: int64
+        nombre:
+          type: string
+        identificador:
+          type: string
+        nombreProf:
+          type: string
+        apellidosProf:
+          type: string
+        opinion:
+          type: string
+    Valoracion:
+      type: object
+      properties:
+        idValoracion:
+          type: integer
+          format: int64
+        alumno_codigo:
+          type: integer
+          format: int64
+        curso_codigo:
+          type: integer
+          format: int64
+        opinion:
+          type: string
