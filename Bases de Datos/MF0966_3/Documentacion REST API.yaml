@@ -26,7 +26,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Curso'
         '404':
-          description: Valoracion no encontrada
+          description: Curso no encontrado
         '500':
           description: Error del servidor
   '/cursos/{idCurso}':
@@ -52,7 +52,7 @@ paths:
         '400':
           description: El id no es valido
         '404':
-          description: No se ha encontrado el usuario
+          description: No se ha encontrado el curso
   /valoraciones:
     get:
       tags:
