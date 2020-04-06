@@ -18,94 +18,102 @@
         </div>
 
         <div class="row">
-          <div class="col" id="listaCompleta">
+          <div class="col" id="listadoCompleto">
             <ul id="pokemons" class="list-group">
                 <li id="pokemon" class="list-group-item">Cargando...</li>
-                <p><button id="boton" type="button" class="btn btn-success">Mas</button></p>
             </ul>
           </div>
 
           <div class="col">
-            <p id="poke">Cargando...</p>
+            <div class="card" style="width: 18rem;">
+              <img id="imagenPokemon" src="" class="card-img-top" alt="Foto Pokemon">
+              <div class="card-body">
+                <h5 id="nombrePokemon" class="card-title">Pokemon</h5>
+                <p id="habilidadPokemon" class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+            </div>
           </div>
         </div>
     </div>
 
 
     <script>
-        window.addEventListener('load', init() );
+      window.addEventListener('load', init() );
 
-        function init(){
-
-            const url = 'https://pokeapi.co/api/v2/pokemon';
-            var urlNombre = '';
-            //creamos un objeto para realizar la REQUEST con ajax
-            var xhttp = new XMLHttpRequest();
-            var xhttp2 = new XMLHttpRequest();
-
-            //PONER CODIGO DENTRO
-            xhttp.onreadystatechange = function() {
-                // recibimos la RESPONSE
-                if (this.readyState == 4 && this.status == 200) {
-                    console.debug( this.responseText );
-
-                    // parsear texto a Json
-                    const jsonData = JSON.parse(this.responseText);    
-                    console.debug( jsonData );
-
-                    // array con pokemons
-                    const pokemons = jsonData.results;
-
-                    let lista = document.getElementById('listaCompleta');
-                    lista.innerHTML = '';
-
-                    for(let i=0; i < pokemons.length; i++ ){
-                        const pokemon = pokemons[i];
-                        
-                        lista.innerHTML += `<li id="pokemon" class="list-group-item">
-                                                <p id="pokemonNombre"><b>${pokemon.name}</b></p>
-                                                <p><button id="boton" type="button" class="btn btn-success">Mas</button></p>
-                                            </li>`;
-
-                    }
-
-                    let elBoton = document.getElementById('boton');
-                    elBoton.addEventListener('click', detalle);
-
-                    function hola(){
-                        let poke = document.getElementById('poke');
-                        poke.innerHTML = 'Hola';
-                    }
-
-                    function detalle(){
-                        
-                        let pokemon1 = document.getElementById('pokemonNombre');
-                        let poke = document.getElementById('poke');
-                        poke.innerHTML = 'Hola: ' + pokemon1.innerText;
-
-                        /*urlNombre = 'https://pokeapi.co/api/v2/pokemon/' + pokemon1.innerText;
-                        const jsonDataNombre = JSON.parse(this.responseText);    
-                        console.debug( jsonDataNombre );*/
-
-                        /*xhttp2.open("GET", urlNombre , true);
-                        xhttp2.send();
-                        console.debug(xhttp2.send());*/
-                    }
-
-                }// his.readyState == 4 && this.status == 200
+      function init(){
+          console.debug('Document Load and Ready');
+          listaCompleta();
+      }; // init
 
 
-            };// onreadystatechange
+      function listaCompleta(){
+          const urlLista = 'https://pokeapi.co/api/v2/pokemon/';
+          console.trace('listaCompleta');
+          
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              
+              if (this.readyState == 4 && this.status == 200) {
+              
+                  // parsear texto a Json
+                  const jsonData = JSON.parse(this.responseText);    
+                  console.debug( jsonData );
 
-            // preparamos la petición GET
-            xhttp.open("GET", url , true);
-            xhttp2.open("GET", urlNombre , true);
-            // enviar la peticion asincrona, meter el codigo en onreadystatechange
-            xhttp.send();
-            xhttp2.send();
+                  // array con pokemons
+                  const pokemons = jsonData.results;
+
+                  let lista = document.getElementById('listadoCompleto');
+                  lista.innerHTML = '';
+
+                  pokemons.forEach( el => {
+                      lista.innerHTML += `<li onclick="listaDetalle('${el.name}')" 
+                                              class="list-group-item">${el.name}</li>`;
+                  });
 
 
-        } 
+              }// his.readyState == 4 && this.status == 200
+
+          };// onreadystatechange
+
+          xhttp.open("GET", urlLista , true);
+          xhttp.send();
+
+      }// pintarLista
+
+
+      function listaDetalle( nombre ){
+
+        console.trace(`listaDetalle ${nombre}`);
+        const urlDetalle = `https://pokeapi.co/api/v2/pokemon/${nombre}/`;
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            
+            if (this.readyState == 4 && this.status == 200) {
+                const jsonData = JSON.parse(this.responseText);    
+                console.debug( jsonData );
+
+                let elNombre = document.getElementById('nombrePokemon');
+                elNombre.textContent = jsonData.name;
+              
+                let elImagen = document.getElementById('imagenPokemon');
+                elImagen.src = jsonData.sprites.front_default;
+
+                let elHabilidad = document.getElementById('habilidadPokemon');
+                elHabilidad.textContent = jsonData.base_experience;
+
+
+
+            }// his.readyState == 4 && this.status == 200
+
+        };// onreadystatechange
+
+        xhttp.open("GET", urlDetalle , true);
+        xhttp.send();
+
+      }//detallePokemon
+
+        
     </script>
 
     
