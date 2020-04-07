@@ -48,10 +48,13 @@
             console.info(frutasNombres);
 
             //Filtrar frutas en oferta
-            const frutasOferta = frutas.filter( el => {
+            /*const frutasOferta = frutas.filter( el => {
                 return el.oferta == true;
             });
-            console.info('frutasOferta ', frutasOferta);
+            console.info('frutasOferta ', frutasOferta);*/
+
+            console.info('Frutas en oferta');
+            console.info(frutas.filter( el => el.oferta).map( el => el.nombre));
 
             //Precio total de todas las frutas
             const valorInicial = 0;
@@ -63,12 +66,27 @@
             }, valorInicial );
             console.info('totalPrecio= ' + totalPrecio);
 
+            //Precio total de las frutas pero con descuento
+            console.info('Precio total con descuentos incluidos');
+            console.info(frutas.map( el => {
+                                                if(el.oferta){
+                                                    return (el.precio - ((el.precio * el.descuento)/100));
+                                                }else{
+                                                    return el.precio;
+                                                }
+                                            }
+            ).reduce((p,c) => p + c, 0));
+
             //Colores de las frutas
-            const frutasColores = frutas.map( fruta => { 
+            /*const frutasColores = frutas.map( fruta => { 
                 console.debug(fruta);
                 return fruta.colores;
             });
-            console.info(frutasColores);
+            console.info(frutasColores);*/
+
+            console.info( frutas.map(el => el.colores)
+                                .reduce( (p,c) => p.concat(c)
+                                ));
 
 
         </script>
